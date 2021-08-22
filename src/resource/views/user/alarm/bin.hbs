@@ -1,0 +1,204 @@
+<div class="main-content">
+    <header>
+        <h4>
+            <label for="nav-toggle">
+                <span class="las la-bars"></span>
+            </label>
+            <div>{{page}}</div>
+        </h4>
+        <div class="search-wrapper">
+            <span class="las la-search"></span>
+            <input type="search" placeholder="Search...">
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light pr-4">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto"> 
+                    <li class="nav-item dropdown">
+                        {{#with user}}
+                        <a  style="display:flex; align-items:center;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="https://baotuoitre.net/wp-content/uploads/2019/05/tieu-su-bach-loc-11.jpg" class="user-avatar" alt="">
+                            <div style="display:flex; flex-direction: column; align-items:center;margin-right:0.2rem;margin-left:0.2rem">
+                              {{username}}
+                              <small>_<span id="role">{{role}}</span></small>
+                            </div>
+                        </a>
+                        {{/with}}
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/user/accounts">Account</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="user/logout?_method=POST">Log out</a>
+                        </div>
+                    </li> 
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <h4>BIN</h4>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="/user/alarms/manage-alarms">Back</a></li>
+            </ul>
+        </nav>
+        <h3>DIGITAL ALARMS</h3>
+        <table class="table table-hover mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ORD</th>
+                    <th scope="col">TAGS NAME</th>
+                    <th scope="col" colspan="2">ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each dalarms}}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td>{{this.tagname}}</td>
+                    <td>
+                        <button type="button" class="btn btn-link restore-btn" data-toggle="modal" data-id={{this._id}} data-type="DA">Restore</button>
+                        <button type="button" class="btn btn-link permanent-delete-btn" data-toggle="modal" data-target="#permanent-delete-comfirmation-1" data-id={{this._id}}>Delete</button>
+                    </td>
+                </tr>
+                {{else}} 
+                <tr>
+                    <td colspan="4" class="text-center">
+                        The bin is empty.  
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <h3>ANALOG ALARMS</h3>
+        <table class="table table-hover mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ORD</th>
+                    <th scope="col">TAGS NAME</th>
+                    <th scope="col">HIGH HIGH</th>
+                    <th scope="col">HIGH</th>
+                    <th scope="col">LOW</th>
+                    <th scope="col">LOW LOW</th>
+                    <th scope="col">DEVIATION</th>
+                    <th scope="col">DEADBAND</th>
+                    <th scope="col" colspan="2">ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each aalarms}}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td>{{this.tagname}}</td>
+                    <td>{{this.highhigh}}</td>
+                    <td>{{this.high}}</td>
+                    <td>{{this.low}}</td>
+                    <td>{{this.lowlow}}</td>
+                    <td>{{this.deviation}}</td>
+                    <td>{{this.deadband}}</td>
+                    <td>
+                        <button type="button" class="btn btn-link restore-btn" data-toggle="modal" data-id={{this._id}} data-type="AA">Restore</button>
+                        <button type="button" class="btn btn-link permanent-delete-btn" data-toggle="modal" data-target="#permanent-delete-comfirmation" data-id={{this._id}}>Delete</button>
+                    </td>
+                </tr>
+                {{else}} 
+                <tr>
+                    <td colspan="10" class="text-center">
+                        The bin is empty.  
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </main>
+</div>
+
+{{!-- Permanent Delete Comfirmation --}}
+<div class="modal fade" id="permanent-delete-comfirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Comfirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This data does not restore after delete. Do you want to delete Analog Alarm permanently?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="submit-permanent-delete-btn">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="permanent-delete-comfirmation-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Comfirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This data does not restore after delete. Do you want to delete Digital Alarm permanently?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="submit-permanent-delete-btn-1">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- submit form --}}
+<form method="POST" name="restore-alarm-form"></form>
+<form method="POST" name="permanent-delete-alarm-form"></form>
+
+
+<script>
+    $(document).ready(() => {
+        var restoreBtn = $('.restore-btn')
+        var permanentDeleteBtn = $('.permanent-delete-btn')
+        var submitPermanentDeleteBtn = $('#submit-permanent-delete-btn')
+        var submitPermanentDeleteBtn1 = $('#submit-permanent-delete-btn-1')
+        var restoreForm = $('form[name="restore-alarm-form"]')
+        var permanentDeleteForm = $('form[name="permanent-delete-alarm-form"]')
+        var permanentDeleteAlarmId
+
+        /* Restore alarm*/
+        restoreBtn.click((e) => {
+            var typeRestore = e.target.dataset.type
+            var restoreAlarmId = e.target.dataset.id 
+            if(typeRestore === 'AA'){
+                restoreForm.attr('action','user/alarms/' + restoreAlarmId + '/aa-restore?_method=PATCH')
+            }
+            else if (typeRestore === 'DA'){
+                restoreForm.attr('action','user/alarms/' + restoreAlarmId + '/da-restore?_method=PATCH')
+            }
+            restoreForm.submit()
+        })
+
+        /* Permanent delete */
+        permanentDeleteBtn.click((e) => {
+            permanentDeleteAlarmId = e.target.dataset.id       
+        })
+
+        /* Submit permanent delete */
+        submitPermanentDeleteBtn.click(() => {
+            permanentDeleteForm.attr('action','user/alarms/' + permanentDeleteAlarmId + '/aa-force?_method=DELETE')
+            permanentDeleteForm.submit()
+        })
+
+        /* Submit permanent delete 1 */
+        submitPermanentDeleteBtn1.click(() => {
+            permanentDeleteForm.attr('action','user/alarms/' + permanentDeleteAlarmId + '/da-force?_method=DELETE')
+            permanentDeleteForm.submit()
+        })
+    })
+</script>
+

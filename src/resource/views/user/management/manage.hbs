@@ -1,0 +1,315 @@
+<div class="main-content">
+    <header>
+        <h4>
+            <label for="nav-toggle">
+                <span class="las la-bars"></span>
+            </label>
+            <div>{{page}}</div>
+        </h4>
+        <div class="search-wrapper">
+            <span class="las la-search"></span>
+            <input type="search" placeholder="Search...">
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light pr-4">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto"> 
+                    <li class="nav-item dropdown">
+                        {{#with user}}
+                        <a  style="display:flex; align-items:center;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="img/account-img.png" class="user-avatar" alt="">
+                            <div style="display:flex; flex-direction: column; align-items:center;margin-right:0.2rem;margin-left:0.2rem">
+                              {{username}}
+                              <small>_<span id="role">{{role}}</span></small>
+                            </div>
+                        </a>
+                        {{/with}}
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/user/accounts">Account</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/user/logout?_method=POST">Log Out</a>
+                        </div>
+                    </li> 
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container-fluid">
+            <h4>GENERAL IMFORMATION</h4>
+            <h6>Device</h6>
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Ord</th>
+                    <th scope="col">Project</th>
+                    <th scope="col">Device ID</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each dataProject}}
+                    <tr>
+                        <th scope="row">{{sum @index 1}}</th>
+                        <td>{{this.nameProject}}</td>
+                        <td>{{this.addressProject}}</td>
+                        {{#if this.activeProject}}
+                            <td><span class="border border-success text-success rounded border-bottom state-active">Active</span></td>
+                        {{else}}
+                            <td><span class="border border-secondary text-secondary rounded border-bottom state-unactive">Unactive</span></td>
+                        {{/if}}
+                        <td>
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#change-project-modal" data-id={{this._id}}>Change</button>
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#project-delete-comfirmation" data-id={{this._id}}>Delete</button>
+                        </td>
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td colspan="5" class="text-center">You have no Project.</td>
+                    </tr>
+                    {{/each}}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse-device-id" aria-expanded="false" aria-controls="collapseExample">
+                                Add a new device
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {{!--  --}}
+            <div class="collapse" id="collapse-device-id">
+                <div class="card card-body">
+                    <form method="POST" action="user/manage/project/create">
+                        <div class="form-group">
+                            <label for="inputAddress">Project Name</label>
+                            <input type="text" class="form-control" id="inputAddress" name="nameProject">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">Device ID</label>
+                                <input type="text" class="form-control" id="inputEmail4" name="addProject">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Status</label>
+                                <select id="inputState" class="form-control" name="stateProject">
+                                    <option selected>Choose State</option>
+                                    <option>Active</option>
+                                    <option>Unactive</option>
+                            </select>
+                            </div>
+                        </div>
+                        {{!-- {{#each error}}
+                        <div class="right-w3l alert alert-danger" role="alert">
+                            {{this}}
+                        </div>
+                        {{/each}} --}}
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+            {{!--  --}}
+            <h6 class="mt-5">User Management</h6>
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Ord</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each dataUser}}
+                    <tr>
+                        <th scope="row">{{sum @index 1}}</th>
+                        <td>{{this.username}}</td>
+                        <td>{{this.phone}}</td>
+                        <td>{{this.role}}</td>
+                        {{#if (isnotAdmin this.role)}}
+                          <td>
+                              <button type="button" class="btn btn-link" data-toggle="modal" data-target="#change-user-modal" data-id={{this._id}}>Change</button>
+                              <button type="button" class="btn btn-link" data-toggle="modal" data-target="#user-delete-comfirmation" data-id={{this._id}}>Delete</button>
+                          </td>
+                        {{/if}}
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+{{!-- Project Delete Comfirmation --}}
+<div class="modal fade" id="project-delete-comfirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">COMFIRMATION</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This action can make data of the Project be <span style="color: red; font-weight: 700;">destroyed</span>. Enter your password to process:
+        <form method="POST" name="delete-project-form">
+            <input type="password" class="form-control mt-2" name="password">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="submit-delete-project-btn">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- User Delete Comfirmation --}}
+<div class="modal fade" id="user-delete-comfirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">COMFIRMATION</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This user will be <span style="color: red; font-weight: 700;">deleted permanently</span>. Enter your password to process:
+        <form method="POST" name="delete-user-form">
+            <input type="password" class="form-control mt-2" name="password">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="submit-delete-user-btn">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- Project Change --}}
+<div class="modal fade" id="change-project-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">CHANGE PROJECT STATE</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Choose the state
+        <form method="POST" name="change-state-form">
+            <select class="custom-select" name="state">
+                <option value="Active">Active</option>
+                <option value="Unactive">Unactive</option>
+            </select>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="submit-change-status-btn">Apply</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- User Change --}}
+<div class="modal fade" id="change-user-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">EDIT USER</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" name="change-user-form" class="">
+            <label for="" style="font-weight: 600;">Role:</label>
+            <select class="custom-select" name="role">
+                <option value="viewer">Viewer</option>
+                <option value="controller">Controller</option>
+            </select>
+            <label for="" class="mt-2" style="font-weight: 600;">Project Monitor:</label>
+            <select class="custom-select" id="device-selection" name="projectId">
+                {{#each dataProject}}
+                <option data-id={{this._id}}>{{this.addressProject}}</option>
+                {{/each}}
+            </select>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="submit-edit-user-btn">Apply</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    $(document).ready(() => {
+        var projectId
+        var userId
+        var deleteProjectForm = $('form[name="delete-project-form"]')
+        var changeStatusForm = $('form[name="change-state-form"]')
+        var deleteUserForm = $('form[name="delete-user-form"]')
+        var changeUserForm = $('form[name="change-user-form"')
+
+        /* Project: Get id  delete button */
+        $('#delete-comfirmation').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        projectId = button.data('id') 
+        })
+
+        /* Project: Get id  change button */
+        $('#change-project-modal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        projectId = button.data('id') 
+        })
+
+        /* User: Get id  delete button */
+        $('#user-delete-comfirmation').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        userId = button.data('id') 
+        })
+
+        /* User: Get id  change button */
+        $('#change-user-modal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        userId = button.data('id') 
+        })
+
+        /* Project: Submit delete */
+        $('#submit-delete-project-btn').click((e) => {
+            deleteProjectForm.attr('action','/user/manage/' + projectId + '/project/delete?_method=DELETE')
+            deleteProjectForm.submit()
+        })
+
+        /* Project: Submit change */
+        $('#submit-change-status-btn').click((e) => {
+            changeStatusForm.attr('action','/user/manage/' + projectId + '/project/change?_method=PATCH')
+            changeStatusForm.submit()
+        })
+
+        /* User: Submit delete */
+        $('#submit-delete-user-btn').click((e) => {
+            deleteUserForm.attr('action','/user/manage/' + userId + '/user/delete?_method=DELETE')
+            deleteUserForm.submit()
+        })
+
+        /* User: Submit change */
+        $('#submit-edit-user-btn').click((e) => {
+            $('#device-selection option:selected').attr('value',$('#device-selection option:selected').data('id'))
+            changeUserForm.attr('action','/user/manage/' + userId + '/user/change?_method=PUT')
+            changeUserForm.submit()
+        })
+
+    })
+</script>

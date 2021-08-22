@@ -1,0 +1,123 @@
+<div class="main-content">
+    <header>
+        <h4>
+            <label for="nav-toggle">
+                <span class="las la-bars"></span>
+            </label>
+            <div>{{page}}</div>
+        </h4>
+        <div class="search-wrapper">
+            <span class="las la-search"></span>
+            <input type="search" placeholder="Search...">
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light pr-4">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto"> 
+                    <li class="nav-item dropdown">
+                        {{#with user}}
+                        <a  style="display:flex; align-items:center;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="https://baotuoitre.net/wp-content/uploads/2019/05/tieu-su-bach-loc-11.jpg" class="user-avatar" alt="">
+                            <div style="display:flex; flex-direction: column; align-items:center;margin-right:0.2rem;margin-left:0.2rem">
+                              {{username}}
+                              <small>_<span id="role">{{role}}</span></small>
+                            </div>
+                        </a>
+                        {{/with}}
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/user/accounts">Account</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="user/logout?_method=POST">Log out</a>
+                        </div>
+                    </li> 
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="/user/datatables?phase=0">Summary</a></li>
+                <li class="page-item"><a class="page-link" href="/user/datatables?phase=1">Phase 1</a></li>
+                <li class="page-item"><a class="page-link" href="/user/datatables?phase=2">Phase 2</a></li>
+                <li class="page-item"><a class="page-link" href="/user/datatables?phase=3">Phase 3</a></li>
+            </ul>
+        </nav>
+        <table class="table table-hover" id="datatables">
+            <caption>10 of {{totalData}} Samples</caption>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ORD</th>
+                    <th scope="col">VOLTAGE (VLN)</th>
+                    <th scope="col">VOLTAGE (VLL)</th>
+                    <th scope="col">CURRENT (I)</th>
+                    <th scope="col">ACTIVE POWER (KW)</th>
+                    <th scope="col">REACTIVE POWER (KVAR)</th>
+                    <th scope="col">APPARENT POWER (KVA)</th>
+                    <th scope="col">POWER FACTOR (PF)</th>
+                    <th scope="col">TIME</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each data}}
+                <tr>
+                    <th scope="row">{{ord this.page @index}}</th>
+                    <td>{{this.VLN}}</td>
+                    <td>{{this.VLL}}</td>
+                    <td>{{this.I}}</td>
+                    <td>{{this.KW}}</td>
+                    <td>{{this.KVAR}}</td>
+                    <td>{{this.KVA}}</td>
+                    <td>{{this.PF}}</td>
+                    <td>{{this.timeShow}}</td>
+                </tr>
+                {{else}} 
+                <tr>
+                    <td colspan="10" class="text-center">
+                        You have no data.     
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <div style="display: flex; justify-content:space-between;">
+            <button type="button" class="btn btn-outline-info" id="export2excelBtn">Export to Excel</button>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end datatable-pagination" data-maxpage={{maxPage}} data-phase={{phase}}>
+                    {{!-- {{#if (panigation )}} --}}
+                    {{!-- {{#if (compare panigation 1 0)}}
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{panigation}}">{{panigation}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sum panigation 1}}">{{sum panigation 1}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sum panigation 2}}">Next</a></li>
+                    {{/if}}
+                    {{#if (compare panigation 2 0)}}
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sub panigation 1}}">{{sub panigation 1}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{panigation}}">{{panigation}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sum panigation 1}}">{{sum panigation 1}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sum panigation 2}}">Next</a></li>
+                    {{/if}} --}}
+                    {{!-- {{#if (middle panigation 2 maxPage -1)}}
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sub panigation 2}}">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sub panigation 1}}">{{sub panigation 1}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{panigation}}">{{panigation}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sum panigation 1}}">{{sum panigation 1}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sum panigation 2}}">Next</a></li>
+                    {{/if}} --}}
+                    {{!-- {{#if (compare panigation maxPage -1)}}
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sub panigation 2}}">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sub panigation 1}}">{{sub panigation 1}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{panigation}}">{{panigation}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sum panigation 1}}">{{sum panigation 1}}</a></li>
+                    {{/if}}
+                    {{#if (compare panigation maxPage 0)}}
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sub panigation 2}}">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{sub panigation 1}}">{{sub panigation 1}}</a></li>
+                        <li class="page-item"><a class="page-link" href="/user/datatables?phase={{phase}}&page={{panigation}}">{{panigation}}</a></li>
+                    {{/if}} --}}
+                </ul>
+            </nav>
+        </div>
+    </main>
+</div>

@@ -1,0 +1,144 @@
+<div class="main-content">
+    <header>
+        <h4>
+            <label for="nav-toggle">
+                <span class="las la-bars"></span>
+            </label>
+            <div>{{page}}</div>
+        </h4>
+        <div class="search-wrapper">
+            <span class="las la-search"></span>
+            <input type="search" placeholder="Search...">
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light pr-4">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto"> 
+                    <li class="nav-item dropdown">
+                        {{#with user}}
+                        <a  style="display:flex; align-items:center;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="https://baotuoitre.net/wp-content/uploads/2019/05/tieu-su-bach-loc-11.jpg" class="user-avatar" alt="">
+                            <div style="display:flex; flex-direction: column; align-items:center;margin-right:0.2rem;margin-left:0.2rem">
+                              {{username}}
+                              <small>_<span id="role">{{role}}</span></small>
+                            </div>
+                        </a>
+                        {{/with}}
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/user/accounts">Account</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="user/logout?_method=POST">Log out</a>
+                        </div>
+                    </li> 
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination alarm-management">
+                <li class="page-item"><a class="page-link" href="/user/alarms">Alarm</a></li>
+                <li class="page-item"><a class="page-link" href="/user/alarms/manage-alarms">Manage Alarm</a></li>
+                <li class="page-item"><a class="page-link" href="/user/alarms/create-alarm">Add new alarm</a></li>
+                <li class="page-item"><a class="page-link" href="/user/alarms/bin">Bin</a></li>
+            </ul>
+        </nav>
+        <div style="display: flex; justify-content: space-between;">
+            <h3>DIGITAL ALARM</h3>
+            <div>
+                <select id="digitalAlarmFilter" class="form-control">
+                    <option selected>All</option>
+                    {{#each dAlarmOption}}
+                    <option value={{this.tagname}}>{{this.tagname}}</option>
+                    {{else}}
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <table class="table table-hover mt-4" id="digital-alarm">
+            <caption id="captionDigitalAlarm">5 of {{totalDataDa}} Samples</caption>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ORD</th>
+                    <th scope="col">TAG NAME</th>
+                    <th scope="col">VALUE</th>
+                    <th scope="col">TIME</th>
+                    <th scope="col">DAY</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each digitalAlert}}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td>{{this.tagname}}</td>
+                    <td>{{this.value}}</td>
+                    <td>{{this.time}}</td>
+                    <td>{{this.day}}</td>
+                </tr>
+                {{else}} 
+                <tr>
+                    <td colspan="5" class="text-center">
+                        You have no warning.     
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end digital-alarm-pagination" data-maxpage={{maxPageDA}}>
+            </ul>
+        </nav>
+        <div style="display: flex; justify-content: space-between;">
+            <h3>ANALOG ALARM</h3>
+            <div>
+                <select id="analogAlarmFilter" class="form-control">
+                    <option selected>All</option>
+                    {{#each aAlarmOption}}
+                    <option value={{this.tagname}}>{{this.tagname}}</option>
+                    {{else}}
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <table class="table table-hover mt-4" id="analog-alarm">
+        <caption id="captionAnalogAlarm">5 of {{totalDataAa}} Samples</caption>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ORD</th>
+                    <th scope="col">TAG NAME</th>
+                    <th scope="col">VALUE</th>
+                    <th scope="col">STATE</th>
+                    <th scope="col">TIME</th>
+                    <th scope="col">DAY</th>
+                    <th scope="col">ACK</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each analogAlert}}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td>{{this.tagname}}</td>
+                    <td>{{this.value}}</td>
+                    <td>{{this.state}}</td>
+                    <td>{{this.time}}</td>
+                    <td>{{this.day}}</td>
+                    <td></td>
+                </tr>
+                {{else}} 
+                <tr>
+                    <td colspan="9" class="text-center">
+                        You have no warning.     
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end analog-alarm-pagination" data-maxpage={{maxPageAA}}>
+            </ul>
+        </nav>
+    </main>
+</div>
+

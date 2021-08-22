@@ -1,0 +1,51 @@
+<div class="main-content">
+    <header>
+        <h2>
+            <label for="nav-toggle">
+                <span class="las la-bars"></span>
+            </label>
+            {{page}}
+        </h2>
+        <div class="search-wrapper">
+            <span class="las la-search"></span>
+            <input type="search" placeholder="Search...">
+        </div>
+        {{#with user}}
+        <div class="user-wrapper">
+            <img src="https://lh3.google.com/u/0/ogw/ADGmqu-fkhBzsh-UkQfsduMEhNSr3Lt9hydg_1pZIQuj=s32-c-mo" style="color: aqua;" alt="">
+            <div>
+                <h5>{{username}}</h5>
+                <small>{{role}}</small>
+            </div>
+        </div>
+        {{/with}}
+    </header>
+    <main>
+        <div id="plot1"></div>
+        <script>
+            var graphDiv = document.getElementById('plot1')
+
+            var data = [{
+            x: [1999, 2000, 2001, 2002],
+            y: [10, 15, 13, 17],
+            type: 'scatter'
+            }];
+
+            var layout = {
+            title: 'Sales Growth',
+            xaxis: {
+                title: 'Year',
+                showgrid: false,
+                zeroline: false
+            },
+            yaxis: {
+                title: 'Percent',
+                showline: false
+            }
+            };
+            Plotly.newPlot(graphDiv, data, layout);
+        </script>
+    </main>
+</div>
+
+

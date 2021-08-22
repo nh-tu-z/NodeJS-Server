@@ -1,0 +1,74 @@
+<div class="main-content">
+    <header>
+        <h4>
+            <label for="nav-toggle">
+                <span class="las la-bars"></span>
+            </label>
+            <div>{{page}}</div>
+        </h4>
+        <div class="search-wrapper">
+            <span class="las la-search"></span>
+            <input type="search" placeholder="Search...">
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light pr-4">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto"> 
+                    <li class="nav-item dropdown">
+                        {{#with user}}
+                        <a  style="display:flex; align-items:center;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="img/account-img.png" class="user-avatar" alt="">
+                            <div style="display:flex; flex-direction: column; align-items:center;margin-right:0.2rem;margin-left:0.2rem">
+                              {{username}}
+                              <small>_<span id="role">{{role}}</span></small>
+                            </div>
+                        </a>
+                        {{/with}}
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/user/accounts">Account</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="user/logout?_method=POST">Log out</a>
+                        </div>
+                    </li> 
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        {{#with user}}
+        <div class="user-profile">
+            <div class="img-container border">
+                <img src="img/account-img.png" id="main-image" class="border" alt="">
+                <div class="profile-name">
+                    <h4>{{username}}</h4>
+                    <small>@{{role}}</small>
+                </div>
+            </div>
+            <div class="detailed-info border">
+                <div class="info-user">
+                    <i class="las la-user la-2x"></i>
+                    <span class="info-user__tittle">User: </span>
+                    <span>{{username}}</span>
+                </div>
+                <div class="info-user">
+                    <i class="las la-phone la-2x"></i>
+                    <span class="info-user__tittle">Phone number: </span>
+                    <span>{{phone}}</span>
+                </div>
+                <div class="info-user">
+                    <i class="lab la-google-plus la-2x"></i>
+                    <span class="info-user__tittle">Email: </span>
+                    <span>{{email}}</span>
+                </div>
+                <div class="info-user">
+                    <i class="las la-street-view la-2x"></i>
+                    <span class="info-user__tittle">Role: </span>
+                    <span>{{role}}</span>
+                </div>
+            </div>
+        </div>
+        {{/with}}
+    </main>
+</div>
